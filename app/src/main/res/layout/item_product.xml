@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.Material3.CardView.Elevated"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="16dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_thumbnail"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintDimensionRatio="4:5"
+            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Large"/>
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:text="RSCH T-SHIRT"
+            android:textSize="16sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            app:layout_constraintTop_toBottomOf="@+id/iv_thumbnail"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Rp. 500.000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name"
+            app:layout_constraintStart_toStartOf="@+id/tv_name"/>
+
+        <TextView
+            android:id="@+id/tv_purpose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Men"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_price"
+            app:layout_constraintStart_toStartOf="@+id/tv_price"/>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/div_1"
+            android:layout_width="2dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            app:dividerColor="#CAC4D0"
+            app:layout_constraintBottom_toBottomOf="@id/tv_purpose"
+            app:layout_constraintStart_toEndOf="@id/tv_purpose"
+            app:layout_constraintTop_toTopOf="@id/tv_purpose" />
+
+        <TextView
+            android:id="@+id/tv_stock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="120 left"
+            android:textSize="12sp"
+            app:layout_constraintTop_toTopOf="@+id/div_1"
+            app:layout_constraintBottom_toBottomOf="@+id/div_1"
+            app:layout_constraintStart_toEndOf="@+id/div_1"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

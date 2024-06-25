@@ -1,0 +1,66 @@
+<resources>
+    <string name="app_name">RSCH App</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="update_profile">Update Profile</string>
+    <string name="done">Done</string>
+    <string name="or_register_with">or register with</string>
+    <string name="or_login_with">or login with</string>
+    <string name="login_term_and_condition_statement">By login here, you agree to the <font color="#6750A4">Terms &amp; Conditions</font> with the App <font color="#6750A4">Privacy Policy.</font></string>
+    <string name="register_term_and_condition_statement">By register here, you agree to the <font color="#6750A4">Terms &amp; Conditions</font> with the App <font color="#6750A4">Privacy Policy.</font></string>
+    <string name="email_label">Email</string>
+    <string name="password_label">Password</string>
+    <string name="confirm_password_label">Confirm Password</string>
+    <string name="fullname_label">Fullname</string>
+    <string name="username_label">Username</string>
+    <string name="email_helper">Example: abcde@gmail.com</string>
+    <string name="password_helper">Minimum 8 characters</string>
+    <string name="confirm_password_helper">Must be the same as the password, Minimum 8 characters</string>
+    <string name="connection_error">No connection, check your internet please</string>
+    <string name="cart">Cart</string>
+    <string name="notification">Notification</string>
+    <string name="menu">Menu</string>
+    <string name="home">Home</string>
+    <string name="store">Store</string>
+    <string name="transaction">Transaction</string>
+    <string name="wishlist">Wishlist</string>
+    <string name="username_helper">Must not contain spaces, Must not have uppercase</string>
+    <string name="fullname_helper">Example: User Testing</string>
+    <string name="retry">Retry</string>
+    <string name="profile">Profile</string>
+    <string name="account">Account</string>
+    <string name="phone_number">Phone number</string>
+    <string name="manage_account">Manage account</string>
+    <string name="change_phone_number">Change phone number</string>
+    <string name="change_phone_number_helper">In case you\'re using another phone number.</string>
+    <string name="change_password_helper">If you wish to use a new one.</string>
+    <string name="change_password">Change password</string>
+    <string name="logout_helper">Are you sure? You\'ll have to log in again once you\'re back.</string>
+    <string name="logout">Log out</string>
+    <string name="update_phone_number">Update Phone Number</string>
+    <string name="new_phone_number_label">New Phone Number</string>
+    <string name="new_phone_number_helper">Must begin with the country code area, Example: 6281255551111</string>
+    <string name="new_password_label">New Password</string>
+    <string name="confirm_new_password_label">Confirm New Password</string>
+    <string name="confirm_new_password_helper">Must be the same as the new password, Minimum 8 characters</string>
+    <string name="new_password_helper">Cannot be the same as the old password, Minimum 8 characters</string>
+    <string name="old_password_label">Old Password</string>
+    <string name="all">All</string>
+    <string name="buy">Buy</string>
+    <string name="desc">Description</string>
+    <string name="size_label">Size</string>
+    <string name="delete">Delete</string>
+    <string name="total">Total</string>
+
+    <!--
+        String for error handling
+    -->
+    <string name="login_bad_request">email or password is invalid</string>
+    <string name="register_bad_request">email, password or confirm password is invalid</string>
+    <string name="logout_bad_request">token is invalid</string>
+    <string name="update_profile_bad_request">fullname or username is invalid</string>
+    <string name="update_phone_number_bad_request">phone number is invalid</string>
+    <string name="update_password_bad_request">old password, new password or confirm new password is invalid</string>
+    <string name="bad_request">your request is invalid</string>
+
+</resources>
