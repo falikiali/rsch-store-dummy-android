@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "RSCH App"
 include(":app")
- 
+include(":core")
