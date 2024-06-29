@@ -41,9 +41,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        android:background="@color/md_theme_tertiaryContainer_highContrast"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_divider">
+        app:layout_constraintTop_toBottomOf="@+id/progress_bar">
 
         <TextView
             android:id="@+id/tv_count_product_selected"
@@ -52,6 +53,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
             android:textSize="12sp"
+            android:textColor="@color/md_theme_onTertiaryContainer_highContrast"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="1 product selected"/>
@@ -62,7 +64,7 @@
             android:layout_marginEnd="16dp"
             android:text="@string/delete"
             android:textStyle="bold"
-            android:textColor="@color/md_theme_primary_highContrast"
+            android:textColor="@color/md_theme_onTertiaryContainer_highContrast"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_count_product_selected"
             app:layout_constraintBottom_toBottomOf="@+id/tv_count_product_selected"/>

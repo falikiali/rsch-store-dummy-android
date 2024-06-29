@@ -42,7 +42,7 @@ object NetworkModule {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.9:3000/api/v3/authentication/")
+            .baseUrl("http://192.168.1.11:3000/api/v3/authentication/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -65,7 +65,7 @@ object NetworkModule {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.9:3001/api/v3/")
+            .baseUrl("http://192.168.1.11:3001/api/v3/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -87,7 +87,7 @@ object NetworkModule {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.9:3002/api/v3/")
+            .baseUrl("http://192.168.1.11:3002/api/v3/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -109,7 +109,7 @@ object NetworkModule {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.9:3003/api/v3/")
+            .baseUrl("http://192.168.1.11:3003/api/v3/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -132,7 +132,7 @@ object NetworkModule {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.9:3004/api/v3/")
+            .baseUrl("http://192.168.1.11:3004/api/v3/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

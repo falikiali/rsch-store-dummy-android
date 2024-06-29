@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.falikiali.rschapp.databinding.ItemProductBinding
 import com.falikiali.rschapp.domain.model.Product
 import com.falikiali.rschapp.helper.ConstantData
+import com.falikiali.rschapp.helper.GeneralHelper
 
 class ProductPagingAdapter: PagingDataAdapter<Product, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
     var onClickItem: ((Product) -> Unit)? = null
@@ -42,7 +43,7 @@ class ProductPagingAdapter: PagingDataAdapter<Product, RecyclerView.ViewHolder>(
     inner class GridViewHolder(private val binding: ItemProductBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Product) {
             with(binding) {
-                val priceInRupiah = ConstantData.convertIntToRupiah(data.price)
+                val priceInRupiah = GeneralHelper.convertIntToRupiah(data.price)
 
                 tvName.text = data.name
                 tvPrice.text = priceInRupiah

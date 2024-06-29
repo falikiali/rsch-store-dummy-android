@@ -7,20 +7,22 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.falikiali.rschapp.R
 import com.falikiali.rschapp.databinding.ItemCartBinding
 import com.falikiali.rschapp.domain.model.ProductCart
-import com.falikiali.rschapp.helper.ConstantData
+import com.falikiali.rschapp.helper.GeneralHelper
 
-class CartAdapter: ListAdapter<ProductCart, CartAdapter.ViewHolder>(DIFF_CALLBACK) {
+class CartAdapter(private val listener: CartListener): ListAdapter<ProductCart, CartAdapter.ViewHolder>(DIFF_CALLBACK) {
 
-    val mapChangedProduct = HashMap<String, Int>()
-    val mapSelectedProduct = HashMap<String, Pair<Int, Int>>()
+    interface CartListener {
+        fun onBtnCheckItemClick(productCart: ProductCart, isChecked: Boolean)
+        fun onBtnIncreaseItemClick(changeProductCart: Map<String, Int>)
+        fun onBtnDecreaseItemClick(changeProductCart: Map<String, Int>)
+        fun onBtnRemoveItemClick(productCart: ProductCart)
+    }
 
-    var onClickBtnIncrease: ((HashMap<String, Int>) -> Unit)? = null
-    var onClickBtnDecrease: ((HashMap<String, Int>) -> Unit)? = null
-    var onUpdateSelectedProduct: ((HashMap<String, Pair<Int, Int>>) -> Unit)? = null
-    var onClickBtnRemove: ((ProductCart) -> Unit)? = null
-    var onClickBtnSelect: ((String, Boolean) -> Unit)? = null
+    private var isLoading: Boolean = true
+    private var changedProductCart = mutableMapOf<String, Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartAdapter.ViewHolder {
         val binding = ItemCartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -29,7 +31,16 @@ class CartAdapter: ListAdapter<ProductCart, CartAdapter.ViewHolder>(DIFF_CALLBAC
 
     override fun onBindViewHolder(holder: CartAdapter.ViewHolder, position: Int) {
         holder.bind(getItem(position))
-        onUpdateSelectedProduct?.invoke(mapSelectedProduct)
+    }
+
+    fun setAdapterLoadingState(isLoading: Boolean) {
+        this.isLoading = isLoading
+        notifyDataSetChanged()
+    }
+
+    fun setChangedProductCart(changeProductCart: Map<String, Int>) {
+        this.changedProductCart = changeProductCart.toMutableMap()
+        notifyDataSetChanged()
     }
 
     inner class ViewHolder(private val binding: ItemCartBinding): RecyclerView.ViewHolder(binding.root) {
@@ -39,8 +50,21 @@ class CartAdapter: ListAdapter<ProductCart, CartAdapter.ViewHolder>(DIFF_CALLBAC
                 tvProductName.text = data.productName
                 tvProductStock.text = "Stock ${data.productStock}"
                 tvProductSize.text = "Size ${data.productSize}"
-                tvPrice.text = ConstantData.convertIntToRupiah(data.totalPrice)
+                tvPrice.text = GeneralHelper.convertIntToRupiah(data.totalPrice)
                 edQuantity.setText(data.quantity.toString())
+
+                if (changedProductCart.containsKey(data.id)) {
+                    changedProductCart[data.id]?.let {
+                        edQuantity.setText(it.toString())
+                        tvPrice.text = GeneralHelper.convertIntToRupiah((data.totalPrice / data.quantity) * edQuantity.text.toString().toInt())
+                    }
+                }
+
+                if (data.isSelected) {
+                    btnSelect.setIconResource(R.drawable.icon_checked)
+                } else {
+                    btnSelect.setIconResource(R.drawable.icon_unchecked)
+                }
 
                 Glide.with(itemView.context)
                     .load(data.productImage)
@@ -49,79 +73,79 @@ class CartAdapter: ListAdapter<ProductCart, CartAdapter.ViewHolder>(DIFF_CALLBAC
                 btnQuantityDecrease.isVisible = edQuantity.text.toString().toInt() > 1
                 btnRemove.isVisible = edQuantity.text.toString().toInt() == 1
 
-                if (data.isSelected) {
-                    mapSelectedProduct[data.id] = Pair(data.quantity, data.totalPrice / data.quantity)
+                btnSelect.isClickable = !isLoading
+                btnRemove.isClickable = !isLoading
+                btnQuantityDecrease.isClickable = !isLoading
+                btnQuantityIncrease.isClickable = !isLoading
+
+                if (isLoading) {
+                    btnQuantityDecrease.setOnClickListener(null)
+                    btnQuantityIncrease.setOnClickListener(null)
+                    btnRemove.setOnClickListener(null)
+                    btnSelect.setOnClickListener(null)
                 } else {
-                    mapSelectedProduct.remove(data.id)
+                    setBtnQuantityDecreaseClickListener(data)
+                    setBtnQuantityIncreaseClickListener(data)
+                    setBtnRemoveClickListener(data)
+                    setBtnCheckClickListener(data)
                 }
+            }
+        }
 
-                //When Btn Decrease Clicked
-                btnQuantityDecrease.setOnClickListener {
-                    if (edQuantity.text.toString().toInt() > 1) {
-                        edQuantity.setText((edQuantity.text.toString().toInt() - 1).toString())
-                        tvPrice.text = ConstantData.convertIntToRupiah((data.totalPrice / data.quantity) * edQuantity.text.toString().toInt())
-
-                        if (edQuantity.text.toString().toInt() != data.quantity) {
-                            mapChangedProduct[data.id] = edQuantity.text.toString().toInt()
-                        } else {
-                            mapChangedProduct.remove(data.id)
-                        }
-
-                        if (data.isSelected) {
-                            mapSelectedProduct[data.id] = Pair(edQuantity.text.toString().toInt(), data.totalPrice / data.quantity)
-                        }
-
-                        btnQuantityDecrease.isVisible = edQuantity.text.toString().toInt() > 1
-                        btnRemove.isVisible = edQuantity.text.toString().toInt() == 1
-
-                        onClickBtnDecrease?.invoke(mapChangedProduct)
-                        onUpdateSelectedProduct?.invoke(mapSelectedProduct)
-                    }
-                }
-
-                //When Btn Increase Clicked
+        private fun setBtnQuantityIncreaseClickListener(data: ProductCart) {
+            with(binding) {
                 btnQuantityIncrease.setOnClickListener {
                     if (edQuantity.text.toString().toInt() < data.productStock) {
                         edQuantity.setText((edQuantity.text.toString().toInt() + 1).toString())
-                        tvPrice.text = ConstantData.convertIntToRupiah((data.totalPrice / data.quantity) * edQuantity.text.toString().toInt())
-
-                        if (edQuantity.text.toString().toInt() != data.quantity) {
-                            mapChangedProduct[data.id] = edQuantity.text.toString().toInt()
-                        } else {
-                            mapChangedProduct.remove(data.id)
-                        }
-
-                        if (data.isSelected) {
-                            mapSelectedProduct[data.id] = Pair(edQuantity.text.toString().toInt(), data.totalPrice / data.quantity)
-                        }
+                        tvPrice.text = GeneralHelper.convertIntToRupiah((data.totalPrice / data.quantity) * edQuantity.text.toString().toInt())
 
                         btnQuantityDecrease.isVisible = edQuantity.text.toString().toInt() > 1
                         btnRemove.isVisible = edQuantity.text.toString().toInt() == 1
 
-                        onClickBtnIncrease?.invoke(mapChangedProduct)
-                        onUpdateSelectedProduct?.invoke(mapSelectedProduct)
+                        if (edQuantity.text.toString().toInt() != data.quantity) {
+                            changedProductCart[data.id] = edQuantity.text.toString().toInt()
+                        } else {
+                            changedProductCart.remove(data.id)
+                        }
+
+                        listener.onBtnIncreaseItemClick(changedProductCart)
                     }
                 }
+            }
+        }
 
-                //When Btn Remove Clicked
-                btnRemove.setOnClickListener {
-                    mapChangedProduct.remove(data.id)
-                    mapSelectedProduct.remove(data.id)
-                    onClickBtnDecrease?.invoke(mapChangedProduct)
-                    onUpdateSelectedProduct?.invoke(mapSelectedProduct)
-                    onClickBtnRemove?.invoke(data)
-                }
+        private fun setBtnQuantityDecreaseClickListener(data: ProductCart) {
+            with(binding) {
+                btnQuantityDecrease.setOnClickListener {
+                    edQuantity.setText((edQuantity.text.toString().toInt() - 1).toString())
+                    tvPrice.text = GeneralHelper.convertIntToRupiah((data.totalPrice / data.quantity) * edQuantity.text.toString().toInt())
 
-                //When Checkbox Clicked
-                btnSelect.setOnCheckedChangeListener { _, isChecked ->
-                    if (isChecked) {
-                        mapSelectedProduct[data.id] = Pair(edQuantity.text.toString().toInt(), data.totalPrice / data.quantity)
+                    btnQuantityDecrease.isVisible = edQuantity.text.toString().toInt() > 1
+                    btnRemove.isVisible = edQuantity.text.toString().toInt() == 1
+
+                    if (edQuantity.text.toString().toInt() != data.quantity) {
+                        changedProductCart[data.id] = edQuantity.text.toString().toInt()
                     } else {
-                        mapSelectedProduct.remove(data.id)
+                        changedProductCart.remove(data.id)
                     }
 
-                    onUpdateSelectedProduct?.invoke(mapSelectedProduct)
-                    onClickBtnSelect?.invoke(data.id, isChecked)
+                    listener.onBtnDecreaseItemClick(changedProductCart)
+                }
+            }
+        }
+
+        private fun setBtnRemoveClickListener(data: ProductCart) {
+            with(binding) {
+                btnRemove.setOnClickListener {
+                    listener.onBtnRemoveItemClick(data)
+                }
+            }
+        }
+
+        private fun setBtnCheckClickListener(data: ProductCart) {
+            with(binding) {
+                btnSelect.setOnClickListener {
+                    listener.onBtnCheckItemClick(data, !data.isSelected)
                 }
             }
         }

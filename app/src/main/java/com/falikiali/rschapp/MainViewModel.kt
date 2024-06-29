@@ -7,9 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.falikiali.rschapp.domain.usecase.CartUseCase
 import com.falikiali.rschapp.domain.usecase.PreferencesUseCase
 import com.falikiali.rschapp.helper.ResultState
-import com.falikiali.rschapp.presentation.main.cart.ChangedProductCart
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,7 +20,8 @@ class MainViewModel @Inject constructor(private val preferencesUseCase: Preferen
     private val _resultUpdateCart = MutableLiveData<ResultState<String>>()
     val resultUpdateCart: LiveData<ResultState<String>> get() = _resultUpdateCart
 
-    private val _changedProduct = MutableLiveData<List<ChangedProductCart>>(emptyList())
+    private val _changedProductCart = MutableLiveData<Map<String, Int>>()
+    val changedProductCart: LiveData<Map<String, Int>> get() = _changedProductCart
 
     init {
         isLoggedIn()
@@ -36,22 +35,20 @@ class MainViewModel @Inject constructor(private val preferencesUseCase: Preferen
         }
     }
 
-    fun updateChangedProduct(products: List<ChangedProductCart>) {
-        _changedProduct.value = products
+    fun updateChangedProduct(products: Map<String, Int>) {
+        _changedProductCart.value = products
     }
 
-    fun updateProductInCart() {
+    fun updateProductInCart(ids: List<String>, quantities: List<Int>) {
         viewModelScope.launch {
-            if (_changedProduct.value!!.isNotEmpty()) {
-                cartUseCase.updateProductInCart.invoke(_changedProduct.value!!.map { it.idProduct }, _changedProduct.value!!.map { it.quantity }).collect {
-                    _resultUpdateCart.postValue(it)
-                }
+            cartUseCase.updateProductInCart.invoke(ids, quantities).collect {
+                _resultUpdateCart.postValue(it)
             }
         }
     }
 
     fun clearChangedProduct() {
-        _changedProduct.value = emptyList()
+        _changedProductCart.value = emptyMap()
     }
 
 }

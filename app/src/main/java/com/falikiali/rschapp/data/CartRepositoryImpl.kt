@@ -109,15 +109,30 @@ class CartRepositoryImpl @Inject constructor(private val cartApiService: CartApi
     override suspend fun updateSelectedProductInCart(
         idCart: String,
         isSelected: Boolean
-    ): Flow<ResultState<String>> {
+    ): Flow<ResultState<List<ProductCart>>> {
         return flow {
             emit(ResultState.Loading)
 
             try {
                 val body = UpdateSelectedProductInCartRequestBody(idCart, isSelected)
-                val response = cartApiService.updateSelectedProductInCart(body)
+                cartApiService.updateSelectedProductInCart(body)
 
-                emit(ResultState.Success(response.statusMessage))
+                val response = cartApiService.getProductInCart()
+                val data = response.data.map {
+                    ProductCart(
+                        it.id,
+                        it.idProduct,
+                        it.idProductSize,
+                        it.productName,
+                        it.productImage,
+                        it.productSize,
+                        it.productStock,
+                        it.isSelected,
+                        it.quantity,
+                        it.totalPrice
+                    )
+                }
+                emit(ResultState.Success(data))
             } catch (e: HttpException) {
                 e.response()?.errorBody().let {
                     val err = Gson().fromJson(it?.charStream(), BaseErrorResponse::class.java)
@@ -144,7 +159,7 @@ class CartRepositoryImpl @Inject constructor(private val cartApiService: CartApi
         }.flowOn(Dispatchers.IO)
     }
 
-    override suspend fun deleteProductInCart(ids: List<String>): Flow<ResultState<String>> {
+    override suspend fun deleteProductInCart(ids: List<String>): Flow<ResultState<List<ProductCart>>> {
         return flow {
             emit(ResultState.Loading)
 
@@ -155,8 +170,24 @@ class CartRepositoryImpl @Inject constructor(private val cartApiService: CartApi
                     body.add(DeleteProductInCartRequestBody(it))
                 }
 
-                val response = cartApiService.deleteProductInCart(body)
-                emit(ResultState.Success(response.statusMessage))
+                cartApiService.deleteProductInCart(body)
+
+                val response = cartApiService.getProductInCart()
+                val data = response.data.map {
+                    ProductCart(
+                        it.id,
+                        it.idProduct,
+                        it.idProductSize,
+                        it.productName,
+                        it.productImage,
+                        it.productSize,
+                        it.productStock,
+                        it.isSelected,
+                        it.quantity,
+                        it.totalPrice
+                    )
+                }
+                emit(ResultState.Success(data))
             } catch (e: HttpException) {
                 e.response()?.errorBody().let {
                     val err = Gson().fromJson(it?.charStream(), BaseErrorResponse::class.java)

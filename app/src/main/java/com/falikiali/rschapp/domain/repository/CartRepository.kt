@@ -8,8 +8,8 @@ interface CartRepository {
 
     suspend fun addProductToCart(idProduct: String, idProductSize: String, quantity: Int): Flow<ResultState<String>>
     suspend fun updateProductInCart(ids: List<String>, quantities: List<Int>): Flow<ResultState<String>>
-    suspend fun updateSelectedProductInCart(idCart: String, isSelected: Boolean): Flow<ResultState<String>>
-    suspend fun deleteProductInCart(ids: List<String>): Flow<ResultState<String>>
+    suspend fun updateSelectedProductInCart(idCart: String, isSelected: Boolean): Flow<ResultState<List<ProductCart>>>
+    suspend fun deleteProductInCart(ids: List<String>): Flow<ResultState<List<ProductCart>>>
     suspend fun getProductInCart(): Flow<ResultState<List<ProductCart>>>
 
 }

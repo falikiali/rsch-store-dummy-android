@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide
 import com.falikiali.rschapp.databinding.FragmentDetailProductBinding
 import com.falikiali.rschapp.domain.model.DetailSizeProduct
 import com.falikiali.rschapp.helper.ConstantData
+import com.falikiali.rschapp.helper.GeneralHelper
 import com.falikiali.rschapp.helper.ResultState
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
@@ -55,7 +56,7 @@ class DetailProductFragment : Fragment() {
         with(binding) {
             tvName.text = product.name
             tvPurpose.text = product.purpose
-            tvPrice.text = ConstantData.convertIntToRupiah(product.price)
+            tvPrice.text = GeneralHelper.convertIntToRupiah(product.price)
             tvDesc.text = product.description
 
             Glide.with(requireContext())
